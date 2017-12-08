@@ -11,7 +11,7 @@ public class Provider {
         System.setProperty("java.net.preferIPv4Stack", "true"); //防止无线网络自动返回IPv6地址
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"META-INF/spring/dubbo-demo-provider.xml"});
         context.start();
-
+//        context.getBean("");
         System.in.read(); // 按任意键退出
     }
 

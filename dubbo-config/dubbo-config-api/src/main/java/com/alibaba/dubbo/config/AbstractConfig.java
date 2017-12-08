@@ -164,7 +164,7 @@ public abstract class AbstractConfig implements Serializable {
         }
     }
 
-    private static String getTagName(Class<?> cls) {
+    private static String getTagName(Class<?> cls) {  //ReferenceBean通过该方法会返回reference。所以关于引用远程Bean的配置都是以dubbo.reference.开头的
         String tag = cls.getSimpleName();
         for (String suffix : SUFFIXS) {
             if (tag.endsWith(suffix)) {

@@ -42,9 +42,9 @@ public class CachedThreadPool implements ThreadPool {
         int queues = url.getParameter(Constants.QUEUES_KEY, Constants.DEFAULT_QUEUES);
         int alive = url.getParameter(Constants.ALIVE_KEY, Constants.DEFAULT_ALIVE);
         return new ThreadPoolExecutor(cores, threads, alive, TimeUnit.MILLISECONDS,
-                queues == 0 ? new SynchronousQueue<Runnable>() :
-                        (queues < 0 ? new LinkedBlockingQueue<Runnable>()
-                                : new LinkedBlockingQueue<Runnable>(queues)),
+                queues == 0 ? new SynchronousQueue<Runnable>() :                //同步移交队列
+                        (queues < 0 ? new LinkedBlockingQueue<Runnable>()       //无界队列
+                                : new LinkedBlockingQueue<Runnable>(queues)),   //有界队列
                 new NamedThreadFactory(name, true), new AbortPolicyWithReport(name, url));
     }
 
