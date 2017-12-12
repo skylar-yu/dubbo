@@ -69,6 +69,7 @@ public class ExtensionLoader<T> {
 
     private static final Pattern NAME_SEPARATOR = Pattern.compile("\\s*[,]+\\s*");
 
+    //每个定义的spi的接口都会构建一个ExtensionLoader实例
     private static final ConcurrentMap<Class<?>, ExtensionLoader<?>> EXTENSION_LOADERS = new ConcurrentHashMap<Class<?>, ExtensionLoader<?>>();
 
     private static final ConcurrentMap<Class<?>, Object> EXTENSION_INSTANCES = new ConcurrentHashMap<Class<?>, Object>();
@@ -608,7 +609,8 @@ public class ExtensionLoader<T> {
                             String line = null;
                             while ((line = reader.readLine()) != null) {
                                 final int ci = line.indexOf('#');
-                                if (ci >= 0) line = line.substring(0, ci);
+                                if (ci >= 0)
+                                    line = line.substring(0, ci);
                                 line = line.trim();
                                 if (line.length() > 0) {
                                     try {
@@ -701,11 +703,11 @@ public class ExtensionLoader<T> {
     private String findAnnotationName(Class<?> clazz) {
         com.alibaba.dubbo.common.Extension extension = clazz.getAnnotation(com.alibaba.dubbo.common.Extension.class);
         if (extension == null) {
-            String name = clazz.getSimpleName();
-            if (name.endsWith(type.getSimpleName())) {
-                name = name.substring(0, name.length() - type.getSimpleName().length());
+            String name = clazz.getSimpleName();        //HessionProtocol
+            if (name.endsWith(type.getSimpleName())) {   //HessionProtocol.endsWith("Protocol")
+                name = name.substring(0, name.length() - type.getSimpleName().length());  // HessionProtocol.substring(0,15-8)
             }
-            return name.toLowerCase();
+            return name.toLowerCase();      //hession
         }
         return extension.value();
     }
