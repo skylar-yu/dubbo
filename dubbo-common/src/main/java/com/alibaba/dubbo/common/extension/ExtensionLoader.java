@@ -503,9 +503,16 @@ public class ExtensionLoader<T> {
                 instance = (T) EXTENSION_INSTANCES.get(clazz);
             }
             injectExtension(instance);
+            /*
+                当有Wrapper扩展点时，获取任何名称的扩展点都会返回Wrapper实例，Wrapper实例封装真实的扩展实现，当有多个Wrapper实现时，会Wrapper封装Wrapper，
+                形成一个链式的结构，比如获取名称是dubbo的Protocol扩展点，通过ExtensionLoader.getExtension("dubbo")获取，ExtensionLoader会返回一个ProtocolListenerWrapper实例，
+                ProtocolListenerWrapper实例持有一个ProtocolFilterWrapper实例，ProtocolListenerWrapper实例持有一个DubboProtocol实例，对象引用关系：
+                ProtocolListenerWrapper->ProtocolFilterWrapper->DubboProtocol.
+             */
             Set<Class<?>> wrapperClasses = cachedWrapperClasses;
             if (wrapperClasses != null && wrapperClasses.size() > 0) {
                 for (Class<?> wrapperClass : wrapperClasses) {
+                    //依次调用拷贝构造函数生成Wrapper的实例，并且再次调用injectExtension注入Wrapper中其他属性
                     instance = injectExtension((T) wrapperClass.getConstructor(type).newInstance(instance));
                 }
             }
