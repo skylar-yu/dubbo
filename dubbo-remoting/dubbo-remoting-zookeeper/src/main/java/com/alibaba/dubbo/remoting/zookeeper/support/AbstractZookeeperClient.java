@@ -61,6 +61,8 @@ public abstract class AbstractZookeeperClient<TargetChildListener> implements Zo
     }
 
     public List<String> addChildListener(String path, final ChildListener listener) {
+        //ChildListener接口用于把zkclient的事件（IZkChildListener）转换到registry事件（NotifyListener）      ???
+        //可以更好的把zkclient的api和dubbo真身的注册中心逻辑分离开，毕竟dubbo除了zkclient以外还可以选择curator。???
         ConcurrentMap<ChildListener, TargetChildListener> listeners = childListeners.get(path);
         if (listeners == null) {
             childListeners.putIfAbsent(path, new ConcurrentHashMap<ChildListener, TargetChildListener>());
