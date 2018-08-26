@@ -40,4 +40,11 @@
         <module>dubbo-rpc-memcached</module>
         <module>dubbo-rpc-redis</module>
     </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.caucho</groupId>
+            <artifactId>hessian</artifactId>
+        </dependency>
+    </dependencies>
 </project>
