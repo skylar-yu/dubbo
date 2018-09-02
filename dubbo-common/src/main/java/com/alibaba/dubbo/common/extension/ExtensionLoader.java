@@ -86,7 +86,7 @@ public class ExtensionLoader<T> {
 
     private final Map<String, Activate> cachedActivates = new ConcurrentHashMap<String, Activate>();
     //此处使用vilotile Map<String, T> cachedInstances = new HashMap<String, T>();
-    //写操作时，synchronized(cachedInstances)，也能达到效果，到时加锁粒度太粗，仔细琢磨。。。
+    //写操作时，synchronized(cachedInstances)，也能达到效果，但是加锁粒度太粗，仔细琢磨。。。
     private final ConcurrentMap<String, Holder<Object>> cachedInstances = new ConcurrentHashMap<String, Holder<Object>>();
     private final Holder<Object> cachedAdaptiveInstance = new Holder<Object>();
     private volatile Class<?> cachedAdaptiveClass = null;
