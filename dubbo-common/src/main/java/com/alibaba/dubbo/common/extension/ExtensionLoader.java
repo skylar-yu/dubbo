@@ -85,6 +85,8 @@ public class ExtensionLoader<T> {
     private final Holder<Map<String, Class<?>>> cachedClasses = new Holder<Map<String, Class<?>>>();
 
     private final Map<String, Activate> cachedActivates = new ConcurrentHashMap<String, Activate>();
+    //此处使用vilotile Map<String, T> cachedInstances = new HashMap<String, T>();
+    //写操作时，synchronized(cachedInstances)，也能达到效果，到时加锁粒度太粗，仔细琢磨。。。
     private final ConcurrentMap<String, Holder<Object>> cachedInstances = new ConcurrentHashMap<String, Holder<Object>>();
     private final Holder<Object> cachedAdaptiveInstance = new Holder<Object>();
     private volatile Class<?> cachedAdaptiveClass = null;
@@ -300,8 +302,9 @@ public class ExtensionLoader<T> {
      */
     @SuppressWarnings("unchecked")
     public T getExtension(String name) {
-        if (name == null || name.length() == 0)
+        if (name == null || name.length() == 0) {
             throw new IllegalArgumentException("Extension name == null");
+        }
         if ("true".equals(name)) {
             return getDefaultExtension();
         }
@@ -313,6 +316,7 @@ public class ExtensionLoader<T> {
         Object instance = holder.get();
         if (instance == null) {
             synchronized (holder) {
+                //此处instance必须是从holder获得的，不能少！！！
                 instance = holder.get();
                 if (instance == null) {
                     instance = createExtension(name);
