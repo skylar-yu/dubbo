@@ -89,6 +89,9 @@ public class ExtensionLoader<T> {
     private final Map<String, Activate> cachedActivates = new ConcurrentHashMap<String, Activate>();
     //此处使用vilotile Map<String, T> cachedInstances = new HashMap<String, T>();
     //写操作时，synchronized(cachedInstances)，也能达到效果，但是加锁粒度太粗，仔细琢磨。。。
+    //dubbo这种方式，在put元素时，1.利用cachedInstances.putIfAbsent()作为原子操作。
+    // 多个线程并发put时候只会有一个成功，成功后，2.再往Holder中set值，需要使用Holder加锁
+    // 第一步是原子操作，第二步也是原子操作，独立开来
     private final ConcurrentMap<String, Holder<Object>> cachedInstances = new ConcurrentHashMap<String, Holder<Object>>();
     private final Holder<Object> cachedAdaptiveInstance = new Holder<Object>();
     private volatile Class<?> cachedAdaptiveClass = null;
