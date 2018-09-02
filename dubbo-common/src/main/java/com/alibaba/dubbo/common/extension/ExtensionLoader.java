@@ -82,6 +82,8 @@ public class ExtensionLoader<T> {
 
     private final ConcurrentMap<Class<?>, String> cachedNames = new ConcurrentHashMap<Class<?>, String>();
 
+    //这里为啥不使用Map<String, Class<?>> cachedClasses = new HashMap<String, Class<?>>();
+    //然后synchronized(cachedClasses){} , 使用Holder可以某一个对象，而cachedClasses是final修饰的，只能清空再加入，不方便操作
     private final Holder<Map<String, Class<?>>> cachedClasses = new Holder<Map<String, Class<?>>>();
 
     private final Map<String, Activate> cachedActivates = new ConcurrentHashMap<String, Activate>();
