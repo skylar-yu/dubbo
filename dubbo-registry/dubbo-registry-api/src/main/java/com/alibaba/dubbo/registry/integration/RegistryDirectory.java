@@ -97,10 +97,12 @@ public class RegistryDirectory<T> extends AbstractDirectory<T> implements Notify
 
     public RegistryDirectory(Class<T> serviceType, URL url) {
         super(url);
-        if (serviceType == null)
+        if (serviceType == null) {
             throw new IllegalArgumentException("service type is null.");
-        if (url.getServiceKey() == null || url.getServiceKey().length() == 0)
+        }
+        if (url.getServiceKey() == null || url.getServiceKey().length() == 0) {
             throw new IllegalArgumentException("registry serviceKey is null.");
+        }
         this.serviceType = serviceType;
         this.serviceKey = url.getServiceKey();
         this.queryMap = StringUtils.parseQueryString(url.getParameterAndDecoded(Constants.REFER_KEY));
@@ -159,6 +161,7 @@ public class RegistryDirectory<T> extends AbstractDirectory<T> implements Notify
         registry.subscribe(url, this);
     }
 
+    @Override
     public void destroy() {
         if (isDestroyed()) {
             return;
@@ -179,6 +182,11 @@ public class RegistryDirectory<T> extends AbstractDirectory<T> implements Notify
         }
     }
 
+    /**
+     * 当注册中心有通知变化时会通知服务消费者更新本地的服务目录
+     * @param urls 已注册信息列表，总不为空，含义同{@link com.alibaba.dubbo.registry.RegistryService#lookup(URL)}的返回值。
+     */
+    @Override
     public synchronized void notify(List<URL> urls) {
         List<URL> invokerUrls = new ArrayList<URL>();
         List<URL> routerUrls = new ArrayList<URL>();
